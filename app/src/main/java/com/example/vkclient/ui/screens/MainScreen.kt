@@ -1,4 +1,4 @@
-package com.example.vkclient.ui.theme
+package com.example.vkclient.ui.screens
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.vkclient.MainViewModel
 import com.example.vkclient.navigation.AppNavGraph
 import com.example.vkclient.navigation.Screen
+import com.example.vkclient.ui.theme.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
