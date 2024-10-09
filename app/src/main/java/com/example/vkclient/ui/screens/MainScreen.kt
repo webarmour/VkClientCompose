@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,7 +25,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.vkclient.MainViewModel
 import com.example.vkclient.navigation.AppNavGraph
+import com.example.vkclient.navigation.NavigationState
 import com.example.vkclient.navigation.Screen
+import com.example.vkclient.navigation.rememberNavigationState
 import com.example.vkclient.ui.theme.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -33,15 +36,15 @@ import com.example.vkclient.ui.theme.NavigationItem
 fun MainScreen(
     viewModel: MainViewModel,
 ) {
-    val navHostController = rememberNavController()
+
+    val navigationState = rememberNavigationState()
 
     Scaffold(
         bottomBar = {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                val navBackStackEntry by
-                navHostController.currentBackStackEntryAsState()
+                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
                 Log.d("COMPOSE_TEST", "BottomNavigation")
 
@@ -54,14 +57,7 @@ fun MainScreen(
                     NavigationBarItem(
                         selected = item.screen.route == currentRoute,
                         onClick = {
-                            navHostController.navigate(route = item.screen.route) {
-
-                                popUpTo(Screen.NewsFeed.route) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigationState.navigateTo(item.screen.route)
                         },
                         icon = {
                             Icon(item.icon, contentDescription = null)
@@ -82,7 +78,7 @@ fun MainScreen(
         }
     ) {
         AppNavGraph(
-            navHostController = navHostController,
+            navHostController = navigationState.navHostController,
             homeScreenContent = {
                 HomeScreen(
                     viewModel = viewModel,
